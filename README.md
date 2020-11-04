@@ -12,7 +12,7 @@ Learning Disability Programming Tool
 A Python flask app runs the [transpyle](https://pypi.org/project/transpyle/) library that allows a user to transpile Python code to C++ code. The electron app runs the Micorsoft Manoco Editor, Blockly editor and the Artyom.js code.
 The Blockly code is added as a submodule in the repository
 
-### How do I run this 
+### How can I get this to work?
 You need to install the following npm packages:
 * artyom.js
 * jquery
@@ -21,3 +21,7 @@ You need to install the following npm packages:
 You will also need to install the following python packages
 * transpyle
 * flask
+
+### How do I run this?
+* You need to start the Python flask server with `python -m flask run`.
+* The run the app with `electron . `
