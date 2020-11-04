@@ -1,0 +1,102 @@
+<!-- The code was created by stitching together examples on the Monaco website -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="container" style="width: 800px; height: 600px; border: 1px solid #ccc"></div>
+    </body>
+
+    <script>
+        (function () {
+            const path = require('path');
+            const amdLoader = require('../../../node_modules/monaco-editor/min/vs/loader.js');
+            const amdRequire = amdLoader.require;
+            const amdDefine = amdLoader.require.define;
+
+            function uriFromPath(_path) {
+                var pathName = path.resolve(_path).replace(/\\/g, '/');
+                if (pathName.length > 0 && pathName.charAt(0) !== '/') {
+                    pathName = '/' + pathName;
+                }
+                return encodeURI('file://' + pathName);
+            }
+
+            amdRequire.config({
+                baseUrl: uriFromPath(path.join(__dirname, '../../../node_modules/monaco-editor/min'))
+            });
+
+            // workaround monaco-css not understanding the environment
+            self.module = undefined;
+
+            amdRequire(['vs/editor/editor.main'], function () {
+                function createDependencyProposals(range) {
+                    // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
+                    // here you could do a server side lookup
+                    return [
+                        {
+                            label: 'if',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            documentation: "Creates a simple if statement structure",
+                            insertText: 'if <condition>: \n\t<expression>',
+                            range: range
+                        },
+                        {
+                            label: 'if_else',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            documentation: "Creates a simple if statement structure",
+                            insertText: 'if <condition>: \n\t<expression>\nelse: \n\t<expression>',
+                            range: range
+                        },
+                        {
+                            label: 'if_elif',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            documentation: "Creates a simple if elif statement structure",
+                            insertText: 'if <condition>: \n\t<expression>\nelif <condition>: \n\t<expression>',
+                            range: range
+                        },
+                        {
+                            label: 'if_elif_else',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            documentation: "Creates a simple if elif else statement structure",
+                            insertText: 'if <condition>: \n\t<expression>\nelif <condition>: \n\t<expression>\nelse: \n\t<expression>',
+                            range: range
+                        }
+                    ];
+                }
+
+                monaco.languages.registerCompletionItemProvider('python', {
+                    provideCompletionItems(model, position) {
+                        var textUntilPosition = model.getValueInRange({startLineNumber: 1, startColumn: 1, endLineNumber: position.lineNumber, endColumn: position.column});
+                        var match = textUntilPosition.match(/if/);
+                        if (!match) {
+                            return { suggestions: [] };
+                        }
+                        var word = model.getWordUntilPosition(position);
+                        var range = {
+                            startLineNumber: position.lineNumber,
+                            endLineNumber: position.lineNumber,
+                            startColumn: word.startColumn,
+                            endColumn: word.endColumn
+                        };
+                        return {
+                            suggestions: createDependencyProposals(range)
+                        };
+                    }
+                })
+
+                var editor = monaco.editor.create(document.getElementById('container'), {
+                    value: ['import banana', '', '', 'class Monkey:', '\t# Bananas the monkey can eat.',
+                        '\tcapacity = 10', '\tdef eat(self, n):', '\t\t"""Make the monkey eat n bananas!"""',
+                        '\t\tself.capacity -= n * banana.size', '', '\tdef feeding_frenzy(self):', '\t\tself.eat(9.25)',
+                        '\t\treturn "Yum yum"'].join('\n'),
+                    language: 'python'
+                });
+            });
+        })();
+    </script>
+
+</html>

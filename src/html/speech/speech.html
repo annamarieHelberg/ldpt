@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Use your voice to program!</title>
+
+    <script src="../../../node_modules/artyom.js/build/artyom.window.js"></script>
+</head>
+<body>
+<h3>Hello dear speech students!</h3>
+    <button id="btn">Read the displayed text</button>
+
+    <p>
+        for count in range(3):
+        <br>
+        print('Hello world!')
+    </p>
+
+</body>
+
+<script>
+    var Jarvis = new Artyom();
+
+    // Code copied form Artyom
+    document.getElementById("btn").addEventListener("click", function(){
+        Jarvis.say("For count in range three print hello world");
+    }, false);
+</script>
+</html>

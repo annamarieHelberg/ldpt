@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transpile</title>
+    <script>window.$ = window.jQuery = require('jquery');</script>
+
+</head>
+<body>
+    <h1>Transpile a Python program to C++</h1>
+    <label for="fileInput" class="custom-file-upload" onclick="displayfilename()">Choose file</label>
+    <input id="fileInput" name="fileInput" type="file" />
+</body>
+
+<script>
+    function displayfilename() {}
+    $('#fileInput').change(function(e) {
+        var fileName = e.target.files[0].path;
+        alert('The file "' + fileName +  '" has been selected.');
+
+        $.ajax({
+            url: 'http://127.0.0.1:5000/transpile',
+            data: JSON.stringify(fileName),
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+            }
+        });
+    });
+</script>
+</html>

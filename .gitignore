@@ -1,0 +1,9 @@
+# Node
+node_modules
+
+# Intellij
+/.idea/
+
+# Python
+Pipfile
+Pipfile.lock
